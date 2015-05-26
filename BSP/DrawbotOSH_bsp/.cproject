@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?>
-
-<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<buildSystem id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.60708950">
 			<storageModule id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.60708950" moduleId="org.eclipse.cdt.core.settings"/>
@@ -10,9 +8,9 @@
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 				<configuration artifactName="DrawBot2_test1_bsp" buildProperties="" description="" id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.60708950" name="Nios II" parent="org.eclipse.cdt.build.core.prefbase.cfg">
 					<folderInfo id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.60708950." name="/" resourcePath="">
-						<toolChain id="altera.nios2.linux.653303271" name="Linux Nios II GCC" superClass="altera.nios2.linux">
-							<targetPlatform id="altera.nios2.linux.500850604" name="Nios II" superClass="altera.nios2.linux"/>
-							<builder buildPath="${workspace_loc://DrawBot2_test1_bsp}" id="cdt.managedbuild.target.gnu.builder.base.1378558781" managedBuildOn="false" name="Gnu Make Builder.Nios II" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+						<toolChain id="altera.nios2.linux.653303271" name="Linux Nios II GCC">
+							<targetPlatform id="altera.nios2.linux.500850604" name="Nios II"/>
+							<builder buildPath="${workspace_loc://DrawBot2_test1_bsp}" id="cdt.managedbuild.target.gnu.builder.base.1378558781" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1390395075" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.803171233" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.2050907949" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -38,7 +36,6 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.60708950" moduleId="org.eclipse.cdt.core.settings" name="Nios II">
 				<externalSettings/>
 				<extensions>
-					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -62,8 +59,11 @@
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="refreshScope" versionNumber="1">
-		<resource resourceType="PROJECT" workspacePath="/DrawBot2_test1_bsp"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Nios II">
+			<resource resourceType="PROJECT" workspacePath="/DrawBot2_test1_bsp"/>
+		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 </cproject>

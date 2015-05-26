@@ -12,6 +12,6 @@
 void init_DB();
 
 
-void move_DB(int, int);
+void move_DB(int, int, int);
 
 #endif /* DRAWBOT_UTIL_H_ */

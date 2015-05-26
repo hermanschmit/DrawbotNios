@@ -67,8 +67,6 @@ ABS_BSP_ROOT := $(call adjust-path-mixed,$(shell pwd))
 # Stash all BSP object files here
 OBJ_DIR := ./obj
 
-NEWLIB_DIR = $(BSP_ROOT_DIR)/newlib
-
 
 #------------------------------------------------------------------------------
 #                              MANAGED CONTENT
@@ -95,12 +93,12 @@ NEWLIB_DIR = $(BSP_ROOT_DIR)/newlib
 
 # This following VERSION comment indicates the version of the tool used to 
 # generate this makefile. A makefile variable is provided for VERSION as well. 
-# ACDS_VERSION: 13.1
-ACDS_VERSION := 13.1
+# ACDS_VERSION: 15.0
+ACDS_VERSION := 15.0
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 162
+# BUILD_NUMBER: 145
 
 SETTINGS_FILE := settings.bsp
 SOPC_FILE := /home/herman/Documents/C5G_Designs/C5G_drawbot_2/c5g_qsys.sopcinfo
@@ -751,12 +749,8 @@ ifneq ($(COMPILE_NEWLIB),)
 NEWLIB_FLAGS += $(BSP_CFLAGS)
 endif
 
-ifneq ($(NEWLIB_FLAGS),)
-ALT_LIBRARY_DIRS += $(NEWLIB_DIR)/nios2-elf/lib
-endif
-
+ifneq ($(NEWLIB_DIR),)
 $(NEWLIB_DIR):
-ifneq ($(NEWLIB_FLAGS),)
 	@$(ECHO) Creating $(NEWLIB_DIR)...
 	nios2-newlib-gen --no-multilib $(NEWLIB_DIR)-build-tmp $(NEWLIB_DIR) --custom "$(NEWLIB_FLAGS)"		
 	@$(ECHO) Removing $(NEWLIB_DIR)-build-tmp...

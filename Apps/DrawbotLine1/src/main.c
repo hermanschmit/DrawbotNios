@@ -5,39 +5,66 @@
  *      Author: herman
  */
 
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include "system.h"
 #include "drawbot.h"
 #include "drawbot_util.h"
 #include "altera_avalon_pio_regs.h"
 
+static void clear_mem(int image_size, float *image)
+{
+	int count;
+	float *ptr;
+	// Clear memory
+	for (count = 0, ptr = image; count < image_size; count++, ptr++)
+		*ptr = NAN;
+
+}
+
+
 int main()
 {
-	float xlim = 1.0f,
-			ylim = 1.0f;
-	float SCALE = 0.4f;
+	float xlim = 1.0f;
+	//float SCALE = 0.6f; // This should be the right number
+	float SCALE = 0.6f;
+	// float SCALE = 0.72f; // As wide as possible
+	// Assumes 25 inch base and 18 wide paper
 	//float INCR = 0.0001f;
 	float INCR = 0.000096f;
+	float YOFFSET = 0.0f;
 
 
 	float x_cur, y_cur, len_l, len_r;
 	const alt_u8 StartButtonMask = 0x01; // 4 button
 	const alt_u8 TestButtonMask = 0x02;
-	alt_u8 Status,ButtonStatus;
+	const alt_u16 SwitchMask = 0xfff0;
+	alt_u8 ButtonStatus;
+	alt_u16 SwitchStatus,sw;
 
 	int image_size = 1<<20;
-	float *image, *ptr;
-	image = (float *) malloc((image_size)*sizeof(float));
-	IOWR_ALTERA_AVALON_PIO_DATA(BASEADDRESS_BASE,image);
+	float *image;
+	//image = (float *) malloc((image_size)*sizeof(float));
+	image = malloc((image_size)*sizeof(float));
+	IOWR_ALTERA_AVALON_PIO_DATA(
+			BASEADDRESS_BASE,
+			((int) image));
 
-	float center[4];
-
-	center[0] = 0.0f;
-	center[1] = 0.0f;
-	center[2] = NAN;
-	center[3] = NAN;
-
+	//float center[4] = {0.0f, 0.0f, NAN, NAN};
+	float center[2][2] = {{0.0f, 0.0f}, {NAN, NAN}};
+	float tester[8][2] =
+		{		{ 0.0f, 0.0f},
+				{-1.0f,-1.0f},
+				{ 1.0f,-1.0f},
+				{ 1.0f, 1.0f},
+				{-1.0f, 1.0f},
+				{ 0.0f, 0.0f},
+				{ NAN, NAN},
+				{ NAN, NAN}
+		};
+	/*
 	float tester[16];
 	tester[0] = 0.0f;
 	tester[1] = 0.0f;
@@ -59,8 +86,19 @@ int main()
 
 	tester[12] = NAN;
 	tester[13] = NAN;
+*/
 
 	int count;
+
+	clear_mem(image_size,image);
+
+	count = 0;
+	while(isnan(*image)) {
+		IOWR_ALTERA_AVALON_PIO_DATA(LEDR_BASE,(count>>19)&0x00000001);
+		count++;
+	}
+	IOWR_ALTERA_AVALON_PIO_DATA(LEDR_BASE,0x0);
+
 
 	while(1) {
 
@@ -73,47 +111,42 @@ int main()
 		len_l = sqrtf(x_cur * x_cur + y_cur * y_cur);
 		len_r = len_l;
 
-		// Clear memory
-		for (count = 0, ptr = image; count < image_size; count++, ptr++)
-			*ptr = NAN;
-
-		// Wait until memory is set
-		count = 0;
-		while(isnan(*image)) {
-			IOWR_ALTERA_AVALON_PIO_DATA(LEDR_BASE,(count>>19)&0x00000001);
-			count++;
-		}
-		IOWR_ALTERA_AVALON_PIO_DATA(LEDR_BASE,0x0);
-
 		int startbutton = 0, testbutton = 0;
 		count = 0;
 		while (!startbutton && !testbutton){
 			ButtonStatus = IORD(KEY_BASE, 0);
+			SwitchStatus = IORD(SWITCH_BASE,0);
 			startbutton = ((ButtonStatus & StartButtonMask) != StartButtonMask);
 			testbutton  = ((ButtonStatus & TestButtonMask)  != TestButtonMask);
-			IOWR_ALTERA_AVALON_PIO_DATA(LEDG_BASE,(count>>19)&0x000011);
+			sw = (SwitchStatus & SwitchMask) >> 4;
+
+			IOWR_ALTERA_AVALON_PIO_DATA(LEDG_BASE,(count>>19)&0x000003);
 			count++;
 		}
 
 		if (startbutton) {
-			Shape(image,
+			int delay = 5000 + sw*1000;
+			Shape(((point *) image),
 					SCALE,
 					x_center,y_center,
 					&x_cur, &y_cur,
 					xlim,
 					&len_l, &len_r,
-					INCR
+					INCR, YOFFSET,
+					delay
 			);
 		} else if (testbutton) {
-			init_DB();
+			int delay = 5000 + sw*1000;
 
+			init_DB();
 			Shape(tester,
 						SCALE,
 						x_center,y_center,
 						&x_cur, &y_cur,
 						xlim,
 						&len_l, &len_r,
-						INCR
+						INCR, YOFFSET,
+						delay
 				);
 
 		}
@@ -134,7 +167,8 @@ int main()
 				&x_cur, &y_cur,
 				xlim,
 				&len_l, &len_r,
-				INCR
+				INCR, YOFFSET,
+				10000
 		);
 
 	}

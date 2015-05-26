@@ -10,20 +10,14 @@
 
 typedef float point[2];
 
-void Square(float , float ,
-		float *, float *,
-		float ,
-		float *, float *,
-		float
-);
-
 void Shape(point *,
 		float,
 		float, float,
 		float *, float *,
 		float ,
 		float *, float *,
-		float
+		float, float,
+		int
 );
 
 

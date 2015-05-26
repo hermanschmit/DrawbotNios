@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_qsys' in SOPC Builder design 'c5g_qsys'
  * SOPC Builder design path: /home/herman/Documents/C5G_Designs/C5G_drawbot_2/c5g_qsys.sopcinfo
  *
- * Generated: Fri Mar 13 22:55:35 PDT 2015
+ * Generated: Tue May 19 22:21:45 PDT 2015
  */
 
 /*
@@ -491,7 +491,7 @@
 #define TIMER_IRQ 0
 #define TIMER_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define TIMER_LOAD_VALUE 124999
-#define TIMER_MULT 0.0010
+#define TIMER_MULT 0.001
 #define TIMER_NAME "/dev/timer"
 #define TIMER_PERIOD 1
 #define TIMER_PERIOD_UNITS "ms"

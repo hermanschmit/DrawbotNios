@@ -6,10 +6,10 @@
 
 
 
-static void updateNextLoc(float ll, float lr, float xlim, float *x_next, float *y_next)
+static void updateNextLoc(float ll, float lr, float xlim, float *x_next, float *y_next, float y_offset)
 {
 	*x_next = (ll * ll - lr * lr + xlim * xlim) / (2 * xlim);
-	*y_next = sqrtf(ll * ll - *x_next * *x_next);
+	*y_next = sqrtf(ll * ll - *x_next * *x_next) - y_offset;
 }
 
 static float delta(int del, float increment) {
@@ -20,11 +20,12 @@ static float delta(int del, float increment) {
 
 static void move(
 		int del_l, int del_r, int commit,
-		float increment,
+		float increment, float y_offset,
 		float *len_l, float *len_r,
 		float *x_cur, float *y_cur,
 		float *x_next, float *y_next,
-		float xlim
+		float xlim,
+		int delay
 )
 {
 	float delta_r,delta_l;
@@ -43,7 +44,7 @@ static void move(
 	lr = *len_r + delta_r;
 	ll = *len_l + delta_l;
 
-	updateNextLoc(ll, lr, xlim, x_next, y_next);
+	updateNextLoc(ll, lr, xlim, x_next, y_next, y_offset);
 
 	if (commit)
 	{
@@ -51,10 +52,20 @@ static void move(
 		*y_cur = *y_next;
 		*len_l = ll;
 		*len_r = lr;
-		move_DB(del_l,del_r);
+		move_DB(del_l,del_r,delay);
 	}
 }
 
+static float delay_ratio(float r, float inc) {
+	float STEPS = 400;
+	float r1 = r/inc;
+	float r2 = (1.0f-r)/inc;
+	float r_min = (r1<r2) ? r1:r2;
+	if (r_min > STEPS) return 1.0f;
+	r_min = (r_min<=0.f)?1.0f:r_min;
+	float d1 = 1.0f/sqrtf(r_min/STEPS);
+	return d1;
+}
 
 static int moveTarget2(
 		float x0, float y0,
@@ -63,7 +74,9 @@ static int moveTarget2(
 		float *x_next, float *y_next,
 		float xlim,
 		float *len_l, float *len_r,
-		float increment) {
+		float increment,
+		float y_offset,
+		int delay) {
 
 	int len_l_i = (int) roundf(*len_l/increment);
 	int len_r_i = (int) roundf(*len_r/increment);
@@ -75,7 +88,7 @@ static int moveTarget2(
 	float r_inc = 1.0f/r_steps;
 	float r;
 	for(r = 0.0; r <= 1.0; r+=r_inc) {
-		float y1 = (delta_y * r + y0);
+		float y1 = (delta_y * r + y0) + y_offset;
 		float x1 = (delta_x * r + x0);
 		float x2 = xlim - x1;
 
@@ -88,17 +101,20 @@ static int moveTarget2(
 		int del_f = f_i-len_l_i;
 		int del_g = g_i-len_r_i;
 
+		int d = delay * delay_ratio(r,r_inc);
+
 		if (fabsf(del_f) > 0 || fabsf(del_g) > 0) {
 			// should only equal +1 or -1
 			// commit
 			move(del_f,
 					del_g,
 					1,
-					increment,
+					increment, y_offset,
 					len_l, len_r,
 					x_cur, y_cur,
 					x_next, y_next,
-					xlim);
+					xlim,
+					d);
 			len_l_i = f_i;
 			len_r_i = g_i;
 
@@ -110,86 +126,6 @@ static int moveTarget2(
 }
 
 
-void Square(
-		float radius,
-		float y_offset,
-		float *x_cur, float *y_cur,
-		float xlim,
-		float *len_l, float *len_r,
-		float increment
-)
-{
-	float x0 = *x_cur;
-	float y0 = *y_cur;
-	float tx = 0.5F - 0.5F * radius;
-	float ty = y_offset + 0.5F - 0.5F * radius;
-	float y_next,x_next;
-
-	if (1) {
-		while (moveTarget2(x0, y0, tx, ty,
-				x_cur, y_cur,
-				&x_next, &y_next,
-				xlim,
-				len_l, len_r,
-				increment)) ;
-
-		x0 = *x_cur;
-		y0 = *y_cur;
-		tx = 0.5F + 0.5F*radius;
-		ty = *y_cur;
-		while (moveTarget2(x0,y0,
-				tx, ty,
-				x_cur, y_cur,
-				&x_next, &y_next,
-				xlim,
-				len_l, len_r,
-				increment)) ;
-		x0 = *x_cur;
-		y0 = *y_cur;
-		tx = *x_cur;
-		ty = 0.5F+0.5F*radius + y_offset;
-		while (moveTarget2(x0,y0,
-				tx, ty,
-				x_cur, y_cur,
-				&x_next, &y_next,
-				xlim,
-				len_l, len_r,
-				increment)) ;
-		x0 = *x_cur;
-		y0 = *y_cur;
-		tx = 0.5F - 0.5F * radius;
-		ty = *y_cur;
-		while (moveTarget2(x0,y0, tx, ty,
-				x_cur, y_cur,
-				&x_next, &y_next,
-				xlim,
-				len_l, len_r,
-				increment)) ;
-		x0 = *x_cur;
-		y0 = *y_cur;
-		tx = *x_cur;
-		ty = 0.5 - 0.5F * radius + y_offset;
-		while (moveTarget2(x0, y0, tx, ty,
-				x_cur, y_cur,
-				&x_next, &y_next,
-				xlim,
-				len_l, len_r,
-				increment)) ;
-		x0 = *x_cur;
-		y0 = *y_cur;
-		tx = 0.5;
-		ty = 0.5 + y_offset;
-		while (moveTarget2(x0, y0, tx, ty,
-				x_cur, y_cur,
-				&x_next, &y_next,
-				xlim,
-				len_l, len_r,
-				increment)) ;
-
-	}
-
-}
-
 void Shape(
 		point *shape_array,
 		float scale,
@@ -197,7 +133,8 @@ void Shape(
 		float *x_cur, float *y_cur,
 		float xlim,
 		float *len_l, float *len_r,
-		float increment
+		float increment, float y_offset,
+		int delay
 )
 {
 	point *pt = shape_array;
@@ -207,8 +144,8 @@ void Shape(
 	float y_next,x_next;
 
 	while (!isnan((*pt)[0])) {
-		float tx = (*pt)[0] * scale + x_center;
-		float ty = (*pt)[1] * scale + y_center;
+		float tx = (*pt)[0] * scale/2 + x_center;
+		float ty = (*pt)[1] * scale/2 + y_center;
 		while (moveTarget2(
 					x0,y0,
 					tx,ty,
@@ -216,7 +153,8 @@ void Shape(
 					&x_next, &y_next,
 					xlim,
 					len_l, len_r,
-					increment));
+					increment, y_offset,
+					delay));
 		x0 = *x_cur;
 		y0 = *y_cur;
 		pt++;

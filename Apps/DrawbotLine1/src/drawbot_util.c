@@ -18,8 +18,6 @@
 
 
 static short MicroStep = 0;
-static int delay2 = 10000;
-static int delay =  10000;
 
 static int db_vec(int state, int dir, int ms) {
 	int DB_vec = 0;
@@ -38,7 +36,7 @@ void init_DB() {
 	IOWR_ALTERA_AVALON_PIO_DATA(LEDG_BASE,0x01);
 }
 
-void move_DB(int left, int right) {
+void move_DB(int left, int right, int delay) {
 	int i;
 	int step_dir = 0;
 	if (left > 0) {
@@ -55,7 +53,7 @@ void move_DB(int left, int right) {
 	IOWR_ALTERA_AVALON_PIO_DATA(DRAWBOT_BASE,vec);
 	IOWR_ALTERA_AVALON_PIO_DATA(LEDG_BASE,vec);
 
-	for (i = 0; i < delay2; i++);
+	for (i = 0; i < delay; i++);
 
 	int step_state = 0x0;
 
