@@ -33,7 +33,10 @@ int main()
 	// float SCALE = 0.72f; // As wide as possible
 	// Assumes 25 inch base and 18 wide paper
 	//float INCR = 0.0001f;
-	float INCR = 0.000096f;
+	/* Measurement: 5000 ticks in 12", base 25", 10416 ticks -> 0.000096 */
+	// float INCR = 0.000096f;
+	/* Measurement: 5000 ticks in 12", base 25", carriage 2", 9583 ticks -> 0.000104 */
+	float INCR = 0.000104;
 	float YOFFSET = 0.0f;
 
 
