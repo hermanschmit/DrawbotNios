@@ -2,7 +2,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2015 Altera Corporation, San Jose, California, USA.           *
+* Copyright (c) 2009 Altera Corporation, San Jose, California, USA.           *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -26,43 +26,55 @@
 * This agreement shall be governed in all respects by the laws of the State   *
 * of California and by the laws of the United States of America.              *
 *                                                                             *
-* Altera does not recommend, suggest or require that this reference design    *
-* file be used in conjunction or combination with any other product.          *
 ******************************************************************************/
 
-#include <stdio.h>
+/*
+ * Support for the Nios II internal interrupt controller.
+ */
 
-#ifdef ALT_USE_DIRECT_DRIVERS
-#include "system.h"
-#include "sys/alt_driver.h"
-#include "sys/alt_stdio.h"
-#endif
-#ifdef ALT_SEMIHOSTING
-#include "sys/alt_stdio.h"
-#include "unistd.h"
-#endif
+#ifndef __ALT_NIOS2_GEN2_IRQ_H__
+#define __ALT_NIOS2_GEN2_IRQ_H__
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif /* __cplusplus */
 
 /*
- * Uses the ALT_DRIVER_WRITE() macro to call directly to driver if available.
- * Otherwise, uses newlib provided putchar() routine.
+ * The macro ALTERA_NIOS2_GEN2_IRQ_INSTANCE is used by the alt_irq_init()
+ * function in the auto-generated file alt_sys_init.c to create an
+ * instance of this interrupt controller device driver state if this
+ * module contains an interrupt controller.
+ * Only one instance of a Nios II is allowed so this macro is just empty.
  */
-int 
-alt_putchar(int c)
-{
-#ifdef ALT_SEMIHOSTING
-	char        c1 = (char)(c & 0xff);
-    return write(STDOUT_FILENO,&c1,1);
-#else
-#ifdef ALT_USE_DIRECT_DRIVERS
-    ALT_DRIVER_WRITE_EXTERNS(ALT_STDOUT_DEV);
-    char        c1 = (char)(c & 0xff);
 
-    if (ALT_DRIVER_WRITE(ALT_STDOUT_DEV, &c1, 1, 0) == -1) {
-        return -1;
-    }
-    return c;
-#else
-    return putchar(c);
-#endif
-#endif
+#define ALTERA_NIOS2_GEN2_IRQ_INSTANCE(name, state)
+
+/*
+ * altera_nios2_gen2_irq_init() is called by the auto-generated function 
+ * alt_irq_init() once for the Nios II if it contains an interrupt controller.
+ * The altera_nios2_gen2_irq_init() routine is called using the 
+ * ALTERA_NIOS2_GEN2_IRQ_INIT macro given below.
+ *
+ * This function initializes the internal interrupt controller
+ * so is not called if the Nios II contains an external interrupt
+ * controller port (because the internal interrupt controller
+ * is removed if this port is present).
+ */
+
+extern void altera_nios2_gen2_irq_init( void );
+
+/*
+ * The macro ALTERA_NIOS2_GEN2_IRQ_INIT is used by the alt_irq_init() routine
+ * in the auto-generated file alt_sys_init.c to initialize an instance
+ * of the interrupt controller device driver state.
+ */
+
+#define ALTERA_NIOS2_GEN2_IRQ_INIT(name, state) altera_nios2_gen2_irq_init()
+
+#ifdef __cplusplus
 }
+#endif /* __cplusplus */
+
+#endif /* __ALT_NIOS2_ULTRA_IRQ_H__ */
+

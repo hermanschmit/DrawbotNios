@@ -2,11 +2,11 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 19, 2015 10:23:37 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1432099417338</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>/home/herman/Documents/C5G_Designs/C5G_drawbot_OSHBoard/software/BSP/DrawbotOSH_bsp</BspGeneratedLocation>
+        <BspGeneratedTimeStamp>Feb 26, 2016 11:34:02 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1456558442505</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>/home/herman/C5G_Designs/C5G_drawbot_OSHBoard/software/drawbotcode/BSP/DrawbotOSH_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
-        <SopcDesignFile>/home/herman/Documents/C5G_Designs/C5G_drawbot_2/c5g_qsys.sopcinfo</SopcDesignFile>
+        <SopcDesignFile>/home/herman/C5G_Designs/C5G_drawbot_OSHBoard/c5g_qsys.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>nios2_qsys</Cpu>
         <SchemaVersion>1.9</SchemaVersion>
@@ -14,7 +14,7 @@
                 <SettingName>hal.sys_clk_timer</SettingName>
                 <Identifier>ALT_SYS_CLK</Identifier>
                 <Type>UnquotedString</Type>
-                <Value>timer</Value>
+                <Value>none</Value>
                 <DefaultValue>none</DefaultValue>
                 <DestinationFile>system_h_define</DestinationFile>
                 <Description>Slave descriptor of the system clock timer device. This device provides a periodic interrupt ("tick") and is typically required for RTOS use. This setting defines the value of ALT_SYS_CLK in system.h.</Description>
@@ -899,12 +899,6 @@
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>timer</slaveDescriptor>
-                <addressRange>0x20041000 - 0x2004101F</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes>timer</attributes>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>drawbot</slaveDescriptor>
                 <addressRange>0x20041020 - 0x2004102F</addressRange>
                 <addressSpan>16</addressSpan>
@@ -962,6 +956,12 @@
                 <slaveDescriptor>onchip_picture_mem1</slaveDescriptor>
                 <addressRange>0x30000000 - 0x3003FFFF</addressRange>
                 <addressSpan>262144</addressSpan>
+                <attributes>memory</attributes>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>TERASIC_SRAM_0</slaveDescriptor>
+                <addressRange>0x40000000 - 0x401FFFFF</addressRange>
+                <addressSpan>2097152</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <LinkerSection>

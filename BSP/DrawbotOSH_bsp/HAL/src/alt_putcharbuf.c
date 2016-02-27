@@ -30,39 +30,51 @@
 * file be used in conjunction or combination with any other product.          *
 ******************************************************************************/
 
-#include <stdio.h>
 
-#ifdef ALT_USE_DIRECT_DRIVERS
-#include "system.h"
-#include "sys/alt_driver.h"
-#include "sys/alt_stdio.h"
-#endif
 #ifdef ALT_SEMIHOSTING
 #include "sys/alt_stdio.h"
 #include "unistd.h"
+
+#ifndef ALT_PUTBUF_SIZE
+#define ALT_PUTBUF_SIZE 64
 #endif
 
-/*
- * Uses the ALT_DRIVER_WRITE() macro to call directly to driver if available.
- * Otherwise, uses newlib provided putchar() routine.
+// Buffer for the printed chars
+static char buf[ALT_PUTBUF_SIZE] ={0};
+// index into the buffer
+static unsigned int fill_index;
+
+/* 
+ * ALT putcharbuf funtion
+ * Used only for semihosting. 
+ * Not thread safe!
+ * This fucntion buffers up chars to be printed until either alt_putbufflush()
+ * is called or the buffer is full.
+ * It is called by alt_printf when semihosting is turned on
+ * Its purpose is to minimize the number of Break 1 issuesd by the semihosting
+ * libraries. 
  */
 int 
-alt_putchar(int c)
+alt_putcharbuf(int c)
 {
-#ifdef ALT_SEMIHOSTING
-	char        c1 = (char)(c & 0xff);
-    return write(STDOUT_FILENO,&c1,1);
-#else
-#ifdef ALT_USE_DIRECT_DRIVERS
-    ALT_DRIVER_WRITE_EXTERNS(ALT_STDOUT_DEV);
-    char        c1 = (char)(c & 0xff);
-
-    if (ALT_DRIVER_WRITE(ALT_STDOUT_DEV, &c1, 1, 0) == -1) {
-        return -1;
-    }
+    buf[fill_index++] = (char)(c & 0xff);
+    if(fill_index >= ALT_PUTBUF_SIZE)
+        alt_putbufflush();
     return c;
-#else
-    return putchar(c);
-#endif
-#endif
 }
+
+/*
+ * ALT putbufflush 
+ * used only for smehosting
+ * Not thread safe!
+ * Dumps all the chars in the buffer to STDOUT
+ */
+int 
+alt_putbufflush()
+{
+    int results;
+    results = write(STDOUT_FILENO,buf,fill_index);
+    fill_index = 0;
+    return results;
+}
+#endif

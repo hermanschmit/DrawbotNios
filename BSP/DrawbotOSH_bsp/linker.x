@@ -2,9 +2,9 @@
  * linker.x - Linker script
  *
  * Machine generated for CPU 'nios2_qsys' in SOPC Builder design 'c5g_qsys'
- * SOPC Builder design path: /home/herman/Documents/C5G_Designs/C5G_drawbot_2/c5g_qsys.sopcinfo
+ * SOPC Builder design path: /home/herman/C5G_Designs/C5G_drawbot_OSHBoard/c5g_qsys.sopcinfo
  *
- * Generated: Fri Mar 13 22:55:35 PDT 2015
+ * Generated: Fri Feb 26 23:34:02 PST 2016
  */
 
 /*
@@ -54,12 +54,14 @@ MEMORY
     reset : ORIGIN = 0x20020000, LENGTH = 32
     onchip_memory2 : ORIGIN = 0x20020020, LENGTH = 127968
     onchip_picture_mem1 : ORIGIN = 0x30000000, LENGTH = 262144
+    TERASIC_SRAM_0 : ORIGIN = 0x40000000, LENGTH = 2097152
 }
 
 /* Define symbols for each memory base-address */
 __alt_mem_mem_if_lpddr2_emif = 0x0;
 __alt_mem_onchip_memory2 = 0x20020000;
 __alt_mem_onchip_picture_mem1 = 0x30000000;
+__alt_mem_TERASIC_SRAM_0 = 0x40000000;
 
 OUTPUT_FORMAT( "elf32-littlenios2",
                "elf32-littlenios2",
@@ -353,6 +355,23 @@ SECTIONS
     } > onchip_picture_mem1
 
     PROVIDE (_alt_partition_onchip_picture_mem1_load_addr = LOADADDR(.onchip_picture_mem1));
+
+    /*
+     *
+     * This section's LMA is set to the .text region.
+     * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
+     *
+     */
+
+    .TERASIC_SRAM_0 : AT ( LOADADDR (.onchip_picture_mem1) + SIZEOF (.onchip_picture_mem1) )
+    {
+        PROVIDE (_alt_partition_TERASIC_SRAM_0_start = ABSOLUTE(.));
+        *(.TERASIC_SRAM_0 .TERASIC_SRAM_0. TERASIC_SRAM_0.*)
+        . = ALIGN(4);
+        PROVIDE (_alt_partition_TERASIC_SRAM_0_end = ABSOLUTE(.));
+    } > TERASIC_SRAM_0
+
+    PROVIDE (_alt_partition_TERASIC_SRAM_0_load_addr = LOADADDR(.TERASIC_SRAM_0));
 
     /*
      * Stabs debugging sections.

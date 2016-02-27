@@ -77,20 +77,20 @@ ALT_CPPFLAGS += -pipe
 
 # This following VERSION comment indicates the version of the tool used to 
 # generate this makefile. A makefile variable is provided for VERSION as well. 
-# ACDS_VERSION: 15.0
-ACDS_VERSION := 15.0
+# ACDS_VERSION: 15.1
+ACDS_VERSION := 15.1
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 145
+# BUILD_NUMBER: 185
 
 # Quartus Generated JDI File. Required for resolving node instance ID's with 
 # design component names. 
-JDI_FILE := /home/herman/Documents/C5G_Designs/C5G_drawbot_2/C5G_drawbot_2.jdi
+JDI_FILE := /home/herman/C5G_Designs/C5G_drawbot_OSHBoard/C5G_drawbot_2.jdi
 
 # Qsys--generated SOPCINFO file. Required for resolving node instance ID's with 
 # design component names. 
-SOPCINFO_FILE := /home/herman/Documents/C5G_Designs/C5G_drawbot_2/c5g_qsys.sopcinfo
+SOPCINFO_FILE := /home/herman/C5G_Designs/C5G_drawbot_OSHBoard/c5g_qsys.sopcinfo
 
 # Big-Endian operation. 
 # setting BIG_ENDIAN is false
@@ -161,9 +161,9 @@ SOPC_SYSID_FLAG += --sidp=0x20041088
 ELF_PATCH_FLAG  += --sidp 0x20041088
 
 # The SOPC Timestamp 
-# setting SOPC_TIMESTAMP is 1407900282
-SOPC_SYSID_FLAG += --timestamp=1407900282
-ELF_PATCH_FLAG  += --timestamp 1407900282
+# setting SOPC_TIMESTAMP is 55
+SOPC_SYSID_FLAG += --timestamp=55
+ELF_PATCH_FLAG  += --timestamp 55
 
 # Enable JTAG UART driver to recover when host is inactive causing buffer to 
 # full without returning error. Printf will not fail with this recovery. none 

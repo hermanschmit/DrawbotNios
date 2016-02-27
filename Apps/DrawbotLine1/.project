@@ -3,7 +3,7 @@
 	<name>DrawbotLine1</name>
 	<comment></comment>
 	<projects>
-		<project>DrawBotOSH_bsp</project>
+		<project>DrawbotOSH_bsp</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

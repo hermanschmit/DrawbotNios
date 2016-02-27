@@ -1,9 +1,9 @@
 # memory.gdb - GDB memory region definitions
 #
 # Machine generated for CPU 'nios2_qsys' in SOPC Builder design 'c5g_qsys'
-# SOPC Builder design path: /home/herman/Documents/C5G_Designs/C5G_drawbot_2/c5g_qsys.sopcinfo
+# SOPC Builder design path: /home/herman/C5G_Designs/C5G_drawbot_OSHBoard/c5g_qsys.sopcinfo
 #
-# Generated: Fri Mar 13 22:55:35 PDT 2015
+# Generated: Fri Feb 26 23:34:02 PST 2016
 
 # DO NOT MODIFY THIS FILE
 #
@@ -54,3 +54,6 @@ memory 0x20020000 0x2003f400 cache
 
 # onchip_picture_mem1
 memory 0x30000000 0x30040000 cache
+
+# TERASIC_SRAM_0
+memory 0x40000000 0x40200000 cache
