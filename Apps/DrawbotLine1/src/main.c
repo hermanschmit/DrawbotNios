@@ -36,7 +36,9 @@ int main()
 	/* Measurement: 5000 ticks in 12", base 25", 10416 ticks -> 0.000096 */
 	// float INCR = 0.000096f;
 	/* Measurement: 5000 ticks in 12", base 25", carriage 2", 9583 ticks -> 0.000104 */
-	float INCR = 0.000104;
+	int MICROSTEP = 0x2;
+	float INCR = 0.000832 / ((float) (1 << MICROSTEP));
+	// float INCR = 0.000104;
 	float YOFFSET = 0.0f;
 
 
@@ -105,7 +107,7 @@ int main()
 
 	while(1) {
 
-		init_DB();
+		init_DB(MICROSTEP);
 
 		float y_center = 0.5f;
 		float x_center = 0.5f;
@@ -128,7 +130,7 @@ int main()
 		}
 
 		if (startbutton) {
-			int delay = 5000 + sw*1000;
+			int delay = (40000 + sw*8000)>>MICROSTEP;
 			Shape(((point *) image),
 					SCALE,
 					x_center,y_center,
@@ -139,9 +141,9 @@ int main()
 					delay
 			);
 		} else if (testbutton) {
-			int delay = 5000 + sw*1000;
+			int delay = (5000 + sw*1000)>>MICROSTEP;
 
-			init_DB();
+			init_DB(MICROSTEP);
 			Shape(tester,
 						SCALE,
 						x_center,y_center,

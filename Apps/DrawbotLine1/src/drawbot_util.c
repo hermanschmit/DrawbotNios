@@ -16,12 +16,15 @@
 #define LEFTPOL 0x1
 #define RIGHTPOL 0x0
 
+#define MSSHIFT 4
 
-static short MicroStep = 0;
+
+static short MicroStep = 3;
 
 static int db_vec(int state, int dir, int ms) {
 	int DB_vec = 0;
 	DB_vec =
+			(((ms & 0x3)<<MSSHIFT)) |
 			(((state & LEFTMASK)>>LEFTSHIFT)<<LEFTSTEP) |
 			(((state & RIGHTMASK)>>RIGHTSHIFT)<<RIGHTSTEP) |
 			((((dir & LEFTMASK)>>LEFTSHIFT)^LEFTPOL)<<LEFTDIR) |
@@ -29,8 +32,8 @@ static int db_vec(int state, int dir, int ms) {
 	return DB_vec;
 }
 
-void init_DB() {
-	MicroStep = 0x0;
+void init_DB(int ms) {
+	MicroStep = ms;
 
 	IOWR_ALTERA_AVALON_PIO_DATA(DRAWBOT_BASE,db_vec(0x0,0x0,MicroStep));
 	IOWR_ALTERA_AVALON_PIO_DATA(LEDG_BASE,0x01);

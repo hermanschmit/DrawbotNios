@@ -58,12 +58,14 @@ static void move(
 
 static float delay_ratio(float r, float inc) {
 	float STEPS = 400;
+	float MAX_RATIO = 20.f;
 	float r1 = r/inc;
 	float r2 = (1.0f-r)/inc;
 	float r_min = (r1<r2) ? r1:r2;
 	if (r_min > STEPS) return 1.0f;
 	r_min = (r_min<=0.f)?1.0f:r_min;
 	float d1 = 1.0f/sqrtf(r_min/STEPS);
+	d1 = (d1>MAX_RATIO)?MAX_RATIO:d1;
 	return d1;
 }
 

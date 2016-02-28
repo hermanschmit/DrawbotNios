@@ -9,7 +9,7 @@
 #define DRAWBOT_UTIL_H_
 
 
-void init_DB();
+void init_DB(int);
 
 
 void move_DB(int, int, int);
