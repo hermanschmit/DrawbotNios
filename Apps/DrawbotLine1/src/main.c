@@ -27,19 +27,7 @@ static void clear_mem(int image_size, float *image)
 
 int main()
 {
-	float xlim = 1.0f;
-	//float SCALE = 0.6f; // This should be the right number
-	float SCALE = 0.6f;
-	// float SCALE = 0.72f; // As wide as possible
-	// Assumes 25 inch base and 18 wide paper
-	//float INCR = 0.0001f;
-	/* Measurement: 5000 ticks in 12", base 25", 10416 ticks -> 0.000096 */
-	// float INCR = 0.000096f;
-	/* Measurement: 5000 ticks in 12", base 25", carriage 2", 9583 ticks -> 0.000104 */
 	int MICROSTEP = 0x2;
-	float INCR = 0.000832 / ((float) (1 << MICROSTEP));
-	// float INCR = 0.000104;
-	float YOFFSET = 0.0f;
 
 
 	float x_cur, y_cur, len_l, len_r;
@@ -69,29 +57,6 @@ int main()
 				{ NAN, NAN},
 				{ NAN, NAN}
 		};
-	/*
-	float tester[16];
-	tester[0] = 0.0f;
-	tester[1] = 0.0f;
-
-	tester[2] = -1.0f;
-	tester[3] = -1.0f;
-
-	tester[4] = 1.0f;
-	tester[5] = -1.0f;
-
-	tester[6] = 1.0f;
-	tester[7] = 1.0f;
-
-	tester[8] = -1.0f;
-	tester[9] = 1.0f;
-
-	tester[10] = 0.0f;
-	tester[11] = 0.0f;
-
-	tester[12] = NAN;
-	tester[13] = NAN;
-*/
 
 	int count;
 
@@ -107,7 +72,7 @@ int main()
 
 	while(1) {
 
-		init_DB(MICROSTEP);
+		ZeroDB(MICROSTEP);
 
 		float y_center = 0.5f;
 		float x_center = 0.5f;
@@ -130,28 +95,17 @@ int main()
 		}
 
 		if (startbutton) {
-			int delay = (40000 + sw*8000)>>MICROSTEP;
 			Shape(((point *) image),
-					SCALE,
 					x_center,y_center,
 					&x_cur, &y_cur,
-					xlim,
-					&len_l, &len_r,
-					INCR, YOFFSET,
-					delay
+					&len_l, &len_r
 			);
 		} else if (testbutton) {
-			int delay = (5000 + sw*1000)>>MICROSTEP;
-
-			init_DB(MICROSTEP);
+			ZeroDB(MICROSTEP);
 			Shape(tester,
-						SCALE,
 						x_center,y_center,
 						&x_cur, &y_cur,
-						xlim,
-						&len_l, &len_r,
-						INCR, YOFFSET,
-						delay
+						&len_l, &len_r
 				);
 
 		}
@@ -167,13 +121,9 @@ int main()
 
 		// return to 0.5 0.5
 		Shape(center,
-				SCALE,
 				x_center,y_center,
 				&x_cur, &y_cur,
-				xlim,
-				&len_l, &len_r,
-				INCR, YOFFSET,
-				10000
+				&len_l, &len_r
 		);
 
 	}

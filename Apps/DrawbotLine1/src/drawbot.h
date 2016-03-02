@@ -11,14 +11,12 @@
 typedef float point[2];
 
 void Shape(point *,
-		float,
 		float, float,
 		float *, float *,
-		float ,
-		float *, float *,
-		float, float,
-		int
+		float *, float *
 );
+
+void ZeroDB(int);
 
 
 #endif /* DRAWBOT_H_ */

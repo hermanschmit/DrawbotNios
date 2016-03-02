@@ -3,8 +3,33 @@
 #include "drawbot.h"
 #include "drawbot_util.h"
 
+// xlim: total width of base relative to increment
+static float XLIM = 1.0f;
 
+// SCALE is portion of total base width used by the drawbot
+// 0.6 fits on width of 18" paper with 25" base
+// 0.72 as wide as possible
+static float SCALE = 0.6f;
+// Assumes 25 inch base and 18 wide paper
 
+// MICROSTEP 0-3
+static int MICROSTEP = 0x0;
+
+// INCR increment using MICROSTEP of 3 --> factor of 8
+/* Measurement: 5000 ticks in 12", base 25", 10416 ticks -> 0.000096 */
+/* Measurement: 5000 ticks in 12", base 25", carriage 2", 9583 ticks -> 0.000104 */
+/* 0.000104 * 8 = 0.000832 */
+// float INCR = 0.000832 / ((float) (1 << MICROSTEP));
+static float INCRBASE = 0.000832;
+static float INCR     = 0.000832;
+
+static float YOFFSET = 0.0f;
+
+// int DELAYCOUNT = 40000 >> MICROSTEP;
+static int DELAYCOUNTBASE = 40000;
+static int DELAYCOUNT     = 40000;
+
+static float MAX_RATIO = 20.0f;
 
 static void updateNextLoc(float ll, float lr, float xlim, float *x_next, float *y_next, float y_offset)
 {
@@ -58,7 +83,6 @@ static void move(
 
 static float delay_ratio(float r, float inc) {
 	float STEPS = 400;
-	float MAX_RATIO = 20.f;
 	float r1 = r/inc;
 	float r2 = (1.0f-r)/inc;
 	float r_min = (r1<r2) ? r1:r2;
@@ -127,17 +151,20 @@ static int moveTarget2(
 
 }
 
+void ZeroDB(int ms) {
+	MICROSTEP = ms;
+	INCR = INCRBASE / ((float) (1 << MICROSTEP));
+	DELAYCOUNT = DELAYCOUNTBASE >> MICROSTEP;
+
+	init_DB(MICROSTEP);
+}
 
 void Shape(
 		point *shape_array,
-		float scale,
 		float x_center, float y_center,
 		float *x_cur, float *y_cur,
-		float xlim,
-		float *len_l, float *len_r,
-		float increment, float y_offset,
-		int delay
-)
+		float *len_l, float *len_r
+		)
 {
 	point *pt = shape_array;
 
@@ -146,17 +173,17 @@ void Shape(
 	float y_next,x_next;
 
 	while (!isnan((*pt)[0])) {
-		float tx = (*pt)[0] * scale/2 + x_center;
-		float ty = (*pt)[1] * scale/2 + y_center;
+		float tx = (*pt)[0] * SCALE/2 + x_center;
+		float ty = (*pt)[1] * SCALE/2 + y_center;
 		while (moveTarget2(
 					x0,y0,
 					tx,ty,
 					x_cur, y_cur,
 					&x_next, &y_next,
-					xlim,
+					XLIM,
 					len_l, len_r,
-					increment, y_offset,
-					delay));
+					INCR, YOFFSET,
+					DELAYCOUNT));
 		x0 = *x_cur;
 		y0 = *y_cur;
 		pt++;
