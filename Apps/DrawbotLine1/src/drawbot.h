@@ -18,5 +18,6 @@ void Shape(point *,
 
 void ZeroDB(int);
 
+void updateLen(float *, float *, float , float , float );
 
 #endif /* DRAWBOT_H_ */
