@@ -23,17 +23,17 @@ static int MICROSTEP = 0x0;
 static float INCRBASE = 0.000832;
 static float INCR     = 0.000832;
 
-static float YOFFSET = 0.09f;
+static float YOFFSET = 0.08f;
 
 // int DELAYCOUNT = 40000 >> MICROSTEP;
 // 40000 is slow
 // 15000 is nice
-static int DELAYCOUNTBASE = 15000;
-static int DELAYCOUNT     = 15000;
+static int DELAYCOUNTBASE = 20000;
+static int DELAYCOUNT     = 20000;
 
 static float MAX_RATIO = 20.0f;
 
-static float SPOOL_RATIO = 0.1f;
+static float SPOOL_RATIO = 0.0f;
 //static float SPOOL_RATIO = 0.04f;
 //static float SPOOL_RATIO = 0.1f;
 //static float SPOOL_RATIO = 0.2f;
