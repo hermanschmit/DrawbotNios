@@ -1,30 +1,8 @@
-# README #
+# DrawBot Code #
 
 This is baremetal software for running the Herman Schmit's FPGA Drawbot on a Cyclone V board with a Nios-II based system.
 
+This code can only be compiled to run on the FPGA design in this repository.
 
-### What is this repository for? ###
+The most useful code is in
 
-* Quick su
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
