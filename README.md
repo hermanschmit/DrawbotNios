@@ -2,7 +2,7 @@
 
 This is baremetal software for running the Herman Schmit's FPGA Drawbot on a Cyclone V board with a Nios-II based system.
 
-This code can only be compiled to run on the FPGA design in this repository.
+This code can only be compiled to run on the FPGA design in this [repository](https://bitbucket.org/herman_schmit/drawbotverilogoshboard).
 
 The most useful code is in
 
